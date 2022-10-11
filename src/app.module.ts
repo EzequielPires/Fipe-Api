@@ -5,7 +5,7 @@ import { ModelModule } from './modules/model/model.module';
 import { VersionModelModule } from './modules/version_model/version_model.module';
 import { VersionModule } from './modules/version/version.module';
 import { YearVersionModelModule } from './modules/year_version_model/year_version_model.module';
-import { FipeOfficialModule } from './services/fipe-official.module';
+import { FipeOfficialModule } from './services/fipe-official/fipe-official.module';
 import { FipeModule } from './modules/fipe/fipe.module';
 
 @Module({

@@ -1,19 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
+import { Brand } from './entities/brand.entity';
+import slugify from 'slugify';
 
 @Injectable()
 export class BrandService {
-  create(createBrandDto: CreateBrandDto) {
-    return 'This action adds a new brand';
+  constructor(@InjectRepository(Brand) private brandRepository: Repository<Brand>) { }
+  async create(createBrandDto: CreateBrandDto) {
+    try {
+      const id_string = slugify(createBrandDto.name, {lower: true});
+      const brand = this.brandRepository.create({...createBrandDto, id_string});
+      return await this.brandRepository.save(brand);
+    } catch (error) {
+      return null;
+    }
   }
 
-  findAll() {
-    return `This action returns all brand`;
+  async findAll() {
+    return await this.brandRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} brand`;
+  async findOne(id: number) {
+    return await this.brandRepository.findOne({where: {id}});
   }
 
   update(id: number, updateBrandDto: UpdateBrandDto) {

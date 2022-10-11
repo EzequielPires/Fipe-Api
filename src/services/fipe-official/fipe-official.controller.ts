@@ -24,4 +24,17 @@ export class FipeOfficialController {
     findVersions(@Body() data: {brand_id: string, model_id: string, year_model: string, type_fuel: string}) {
         return this.fipeOfficialService.findDetailsCar('290', data.brand_id, data.model_id, data.year_model, data.type_fuel);
     }
+
+    @Post('sync-brands')
+    syncBrands() {
+        return this.fipeOfficialService.syncBrands();
+    }
+    @Post('sync-models')
+    syncModels() {
+        return this.fipeOfficialService.syncModels();
+    }
+    @Post('sync-years')
+    syncYears() {
+        return this.fipeOfficialService.syncYears();
+    }
 }

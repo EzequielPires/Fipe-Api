@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateYearVersionModelDto } from './dto/create-year_version_model.dto';
 import { UpdateYearVersionModelDto } from './dto/update-year_version_model.dto';
+import { YearVersionModel } from './entities/year_version_model.entity';
 
 @Injectable()
 export class YearVersionModelService {
-  create(createYearVersionModelDto: CreateYearVersionModelDto) {
-    return 'This action adds a new yearVersionModel';
+  constructor(
+    @InjectRepository(YearVersionModel) private yearVersionModelVersionRepository: Repository<YearVersionModel>
+  ) {}
+
+  async create(createYearVersionModelDto: CreateYearVersionModelDto) {
+    const year = this.yearVersionModelVersionRepository.create(createYearVersionModelDto);
+    return await this.yearVersionModelVersionRepository.save(year);
   }
 
   findAll() {

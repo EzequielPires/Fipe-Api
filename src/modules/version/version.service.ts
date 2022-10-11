@@ -1,15 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateVersionDto } from './dto/create-version.dto';
 import { UpdateVersionDto } from './dto/update-version.dto';
+import { Version } from './entities/version.entity';
+import slugify from 'slugify';
 
 @Injectable()
 export class VersionService {
-  create(createVersionDto: CreateVersionDto) {
-    return 'This action adds a new version';
+  constructor(
+    @InjectRepository(Version) private versionRepository: Repository<Version>
+  ) {}
+
+  async create(createVersionDto: CreateVersionDto) {
+    try {
+      const id_string = slugify(createVersionDto.name, {lower: true});
+      const version = this.versionRepository.create({...createVersionDto, id_string});
+      return await this.versionRepository.save(version);
+    } catch (error) {
+      return null;
+    }
   }
 
-  findAll() {
-    return `This action returns all version`;
+  async findAll() {
+    return await this.versionRepository.find();
   }
 
   findOne(id: number) {
